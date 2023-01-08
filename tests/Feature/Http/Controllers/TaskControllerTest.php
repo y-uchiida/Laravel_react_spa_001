@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers;
 use App\Models\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class TaskControllerTest extends TestCase
@@ -37,6 +38,34 @@ class TaskControllerTest extends TestCase
     }
 
     /** @test */
+    public function titleが入力されていない場合はTaskを追加できない()
+    {
+        $data = [
+            'title' => '',
+        ];
+        $response = $this->postJson('/api/tasks', $data);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['title' => 'タイトルは必ず指定してください']);
+
+        $this->assertDatabaseEmpty('tasks');
+    }
+
+    /** @test */
+    public function titleが255文字以上の場合はTaskを追加できない()
+    {
+        $data = [
+            'title' => str_repeat('あ', 256)
+        ];
+        $response = $this->postJson('/api/tasks', $data);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['title' => 'タイトルは、255文字以下で指定してください。']);
+
+        $this->assertDatabaseEmpty('tasks');
+    }
+
+    /** @test */
     public function Taskを更新できる()
     {
         $task = Task::factory()->create([
@@ -55,6 +84,50 @@ class TaskControllerTest extends TestCase
         $this->assertDatabaseHas('tasks', [
             'id' => $task->id,
             ...$data
+        ]);
+    }
+
+    /** @test */
+    public function titleが入力されていない場合はTaskを更新できない()
+    {
+        $task = Task::factory()->create([
+            'title' => 'task title'
+        ]);
+        $data = [
+            'title' => '',
+        ];
+        $response = $this->putJson("/api/tasks/$task->id", $data);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['title' => 'タイトルは必ず指定してください']);
+
+        dump($task->toArray());
+
+        $this->assertDatabaseHas('tasks', [
+            'id' => $task->id,
+            'title' => $task->title
+        ]);
+    }
+
+    /** @test */
+    public function titleが255文字以上の場合はTaskを更新できない()
+    {
+        $task = Task::factory()->create([
+            'title' => 'task title'
+        ]);
+        $data = [
+            'title' => str_repeat('あ', 256)
+        ];
+        $response = $this->putJson("/api/tasks/$task->id", $data);
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['title' => 'タイトルは、255文字以下で指定してください。']);
+
+        dump($task->toArray());
+
+        $this->assertDatabaseHas('tasks', [
+            'id' => $task->id,
+            'title' => $task->title
         ]);
     }
 
