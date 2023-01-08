@@ -57,4 +57,17 @@ class TaskControllerTest extends TestCase
             ...$data
         ]);
     }
+
+    /** @test */
+    public function Taskを削除できる()
+    {
+        $task = Task::factory()->create();
+
+        $response = $this->deleteJson("/api/tasks/$task->id");
+
+        $response->assertOk();
+        $response->assertJsonFragment($task->toArray());
+
+        $this->assertDatabaseMissing('tasks', $task->toArray());
+    }
 }
