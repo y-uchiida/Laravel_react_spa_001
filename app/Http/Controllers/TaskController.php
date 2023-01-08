@@ -65,13 +65,18 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateTaskRequest  $request
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
+     * @param  \App\Http\Requests\UpdateTaskRequest  $request 更新する情報
+     * @param  \App\Models\Task  $task 更新対象のTask
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        //
+        $task->title = $request->title;
+
+        $result = $task->update();
+        return $result
+            ? response()->json($task, 200)
+            : response()->json([], 500);
     }
 
     /**

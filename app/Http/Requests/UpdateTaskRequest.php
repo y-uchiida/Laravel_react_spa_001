@@ -13,7 +13,8 @@ class UpdateTaskRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        // いったんtrueにしておく
+        return true;
     }
 
     /**
