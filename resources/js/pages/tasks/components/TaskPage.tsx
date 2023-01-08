@@ -1,18 +1,18 @@
 import axios from "axios"
-import { useEffect, useState } from "react";
 import { Task } from "../../../types/Task";
-
+import { useQuery } from "react-query";
 
 export const TaskPage = () => {
-    const [tasks, setTasks] = useState<Task[]>([]);
-
-    useEffect(() => {
-        getTasks();
-    }, []);
-
-    const getTasks = async () => {
+    const { data: tasks, status } = useQuery('tasks', async () => {
         const { data } = await axios.get<Task[]>('api/tasks');
-        setTasks(data);
+        return data;
+    });
+
+    if (status === 'loading') return <div>loading...</div>
+    else if (status === 'error') return <div>エラーが発生しました</div>
+
+    if (!tasks || tasks.length === 0) {
+        return <div>登録されたタスクはありません</div>
     }
 
     return (
