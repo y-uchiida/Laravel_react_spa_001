@@ -7,11 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     @viteReactRefresh
-    @vite(['resources/css/app.css', 'resources/js/app.jsx'])
+    @vite(['resources/css/app.css', 'resources/js/main.tsx'])
 </head>
 
 <body>
-    <div id="app"></div>
+    <div id="root"></div>
 </body>
 
 </html>
