@@ -9,13 +9,12 @@ use App\Models\Task;
 class TaskController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Task の一覧を返す
+     * @return Task[]
      */
     public function index()
     {
-        //
+        return Task::all();
     }
 
     /**
