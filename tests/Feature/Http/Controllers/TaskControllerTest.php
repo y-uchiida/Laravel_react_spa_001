@@ -35,4 +35,26 @@ class TaskControllerTest extends TestCase
 
         $this->assertDatabaseHas('tasks', $data);
     }
+
+    /** @test */
+    public function Taskを更新できる()
+    {
+        $task = Task::factory()->create([
+            'title' => 'task title'
+        ]);
+
+        $data = [
+            'title' => 'updated title'
+        ];
+
+        $response = $this->putJson("/api/tasks/$task->id", $data);
+
+        $response->assertOk();
+        $response->assertJsonFragment($data);
+
+        $this->assertDatabaseHas('tasks', [
+            'id' => $task->id,
+            ...$data
+        ]);
+    }
 }
