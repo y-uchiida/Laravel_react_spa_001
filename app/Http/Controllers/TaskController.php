@@ -28,14 +28,16 @@ class TaskController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreTaskRequest  $request
-     * @return \Illuminate\Http\Response
+     * Taskデータを受け取ってレコードを作成する
+     * @param App\Http\Requests\StoreTaskRequest $request
+     * @return Illuminate\Http\Response
      */
     public function store(StoreTaskRequest $request)
     {
-        //
+        $task = Task::create($request->all());
+        return $task
+            ? response()->json($task, 201) // 作成成功の場合は作成したTask のデータと201 レスポンス
+            : response()->json([], 500); // 作成失敗の場合は空配列と500 レスポンス
     }
 
     /**

@@ -21,4 +21,18 @@ class TaskControllerTest extends TestCase
         $response->assertOk();
         $response->assertJsonCount($taskDataCount);
     }
+
+    /** @test */
+    public function Taskを追加できる()
+    {
+        $data = [
+            'title' => 'task title',
+        ];
+        $response = $this->postJson('/api/tasks', $data);
+
+        $response->assertStatus(201);
+        $response->assertJsonFragment($data);
+
+        $this->assertDatabaseHas('tasks', $data);
+    }
 }
