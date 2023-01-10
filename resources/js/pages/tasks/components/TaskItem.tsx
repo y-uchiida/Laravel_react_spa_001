@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Task } from '../../../types/Task'
-import { useUpdateDoneTask, useUpdateTask } from '../../../queries/TaskQuery';
+import { useDeleteTask, useUpdateDoneTask, useUpdateTask } from '../../../queries/TaskQuery';
 import { toast } from 'react-toastify';
 
 type Props = {
@@ -10,6 +10,7 @@ type Props = {
 export const TaskItem = ({ task }: Props) => {
     const updateDoneTask = useUpdateDoneTask();
     const updateTask = useUpdateTask();
+    const deleteTask = useDeleteTask();
 
     const [editTitle, setEditTitle] = useState<string | undefined>(undefined);
 
@@ -33,10 +34,14 @@ export const TaskItem = ({ task }: Props) => {
      * @param e
      */
     const handleOnKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        console.log('called');
         if (['Escape', 'Tab'].includes(e.key)) {
             setEditTitle(undefined);
         }
+    }
+
+    const handleDeleteButtonClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
+        deleteTask.mutate({ id: task.id });
     }
 
     const ItemInput = () => {
@@ -45,7 +50,7 @@ export const TaskItem = ({ task }: Props) => {
                 <input
                     type="text"
                     onChange={(e) => setEditTitle(e.target.value)}
-                    // onKeyDown={handleOnKey}
+                    onKeyDown={handleOnKey}
                     value={editTitle} />
                 <button
                     className='btn'
@@ -90,6 +95,12 @@ export const TaskItem = ({ task }: Props) => {
                     }}>
                     {task.title}
                 </span>
+                <button
+                    className='btn'
+                    onClick={handleDeleteButtonClick}
+                >
+                    削除
+                </button>
             </>
         )
     }
