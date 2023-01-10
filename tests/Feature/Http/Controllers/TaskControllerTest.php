@@ -3,14 +3,27 @@
 namespace Tests\Feature\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class TaskControllerTest extends TestCase
 {
     use RefreshDatabase;
+
+    /** @var App\Models\User $user */
+    private $user;
+
+    // テスト関数を処理する前に実行する内容
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        // ユーザーを作成し、ログイン状態にしておく
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
+    }
 
     /** @test */
     public function Taskの一覧が取得できる()
@@ -101,8 +114,6 @@ class TaskControllerTest extends TestCase
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['title' => 'タイトルは必ず指定してください']);
 
-        dump($task->toArray());
-
         $this->assertDatabaseHas('tasks', [
             'id' => $task->id,
             'title' => $task->title
@@ -122,8 +133,6 @@ class TaskControllerTest extends TestCase
 
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['title' => 'タイトルは、255文字以下で指定してください。']);
-
-        dump($task->toArray());
 
         $this->assertDatabaseHas('tasks', [
             'id' => $task->id,
