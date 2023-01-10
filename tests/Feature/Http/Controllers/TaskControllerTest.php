@@ -143,4 +143,24 @@ class TaskControllerTest extends TestCase
 
         $this->assertDatabaseMissing('tasks', $task->toArray());
     }
+
+    /** @test */
+    public function updateDoneでTaskのis_doneを変更できる()
+    {
+        $task = Task::factory()->create();
+
+        // false を true に変える
+        $response = $this->patchJson("/api/tasks/update-done/$task->id", [
+            "is_done" => true
+        ]);
+        $response->assertOk();
+        $response->assertJsonFragment(['is_done' => true]);
+
+        // true を false に変える
+        $response = $this->patchJson("/api/tasks/update-done/$task->id", [
+            "is_done" => false
+        ]);
+        $response->assertOk();
+        $response->assertJsonFragment(['is_done' => false]);
+    }
 }
