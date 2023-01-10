@@ -1,6 +1,15 @@
 import { useQuery, useQueryClient, useMutation } from "react-query";
 import { createTask, getTasks, updateDoneTask } from "../api/TaskApi";
 import { toast } from "react-toastify";
+import { AxiosError, AxiosResponse } from "axios";
+
+type ErrorResponse = {
+    data: {
+        errors: {
+            messages: string[]
+        }
+    }
+}
 
 export const useTasks = () => {
     return useQuery('tasks', () => getTasks());
@@ -29,8 +38,19 @@ export const useCreateTask = () => {
             queryClient.invalidateQueries('tasks');
             toast.success('タスクを追加しました');
         },
-        onError: () => {
-            toast.error('タスクの追加に失敗しました');
+        onError: (error: AxiosError) => {
+            const response: ErrorResponse | undefined = error.response as ErrorResponse;
+            if (response?.data.errors) {
+                // バリデーションエラーのメッセージがある場合はそれを表示する
+                Object.values(response?.data.errors).map((error) => {
+                    error.map(message => {
+                        toast.error(message);
+                    });
+                });
+            } else {
+                // バリデーションエラーがない場合は汎用のエラーメッセージを表示する
+                toast.error('タスクの追加に失敗しました');
+            }
         }
     });
 };
