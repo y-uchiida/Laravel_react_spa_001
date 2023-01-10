@@ -15,7 +15,7 @@ export const TaskItem = ({ task }: Props) => {
                     <input
                         type="checkbox"
                         className="checkbox-input"
-                        checked={task.is_done}
+                        defaultChecked={task.is_done}
                         onClick={() => updateDoneTask.mutate(task)}
                     />
                 </label>
