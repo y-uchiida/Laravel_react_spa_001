@@ -1,5 +1,12 @@
+import { TaskInput } from "./TaskInput";
+import { TaskList } from "./TaskList";
+
 export const TaskPage = () => {
+
     return (
-        <div>TaskPage</div>
+        <>
+            <TaskInput />
+            <TaskList />
+        </>
     )
 }
