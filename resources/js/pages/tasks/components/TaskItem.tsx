@@ -6,6 +6,15 @@ type Props = {
 
 export const TaskItem = ({ task }: Props) => {
     return (
-        <div>{task.title}</div>
+        <div>
+            <li className={task.is_done ? 'done' : ''}>
+                <label className="checkbox-label" htmlFor="">
+                    <input type="checkbox" className="checkbox-input" checked={task.is_done} />
+                </label>
+                <span>
+                    {task.title}
+                </span>
+            </li>
+        </div>
     )
 }
