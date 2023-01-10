@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient, useMutation } from "react-query";
-
 import { getTasks, updateDoneTask } from "../api/TaskApi";
+import { toast } from "react-toastify";
 
 export const useTasks = () => {
     return useQuery('tasks', () => getTasks());
@@ -14,6 +14,9 @@ export const useUpdateDoneTask = () => {
         // invalidateQueries でキャッシュを破棄してデータを再取得する
         onSuccess: () => {
             queryClient.invalidateQueries('tasks');
+        },
+        onError: () => {
+            toast.error('更新に失敗しました');
         }
     });
 }
