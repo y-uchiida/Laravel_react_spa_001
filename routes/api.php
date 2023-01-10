@@ -15,9 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// sanctum で認証されているユーザーのみがアクセスできるようにミドルウェアを通す
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::get('user', function (Request $request) {
+        return $request->user();
+    });
+    Route::apiResource('tasks', TaskController::class);
+    Route::patch('tasks/update-done/{task}', [TaskController::class, 'updateDone']);
 });
-
-Route::apiResource('tasks', TaskController::class);
-Route::patch('tasks/update-done/{task}', [TaskController::class, 'updateDone']);
