@@ -1,12 +1,7 @@
-import axios from "axios"
-import { Task } from "../../../types/Task";
-import { useQuery } from "react-query";
+import { useTasks } from "../../../queries/TaskQuery"
 
 export const TaskPage = () => {
-    const { data: tasks, status } = useQuery('tasks', async () => {
-        const { data } = await axios.get<Task[]>('api/tasks');
-        return data;
-    });
+    const { data: tasks, status } = useTasks();
 
     if (status === 'loading') return <div>loading...</div>
     else if (status === 'error') return <div>エラーが発生しました</div>
