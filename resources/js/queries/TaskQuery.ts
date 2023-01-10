@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient, useMutation } from "react-query";
-import { getTasks, updateDoneTask } from "../api/TaskApi";
+import { createTask, getTasks, updateDoneTask } from "../api/TaskApi";
 import { toast } from "react-toastify";
 
 export const useTasks = () => {
@@ -20,3 +20,17 @@ export const useUpdateDoneTask = () => {
         }
     });
 }
+
+export const useCreateTask = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation(createTask, {
+        onSuccess: () => {
+            queryClient.invalidateQueries('tasks');
+            toast.success('タスクを追加しました');
+        },
+        onError: () => {
+            toast.error('タスクの追加に失敗しました');
+        }
+    });
+};

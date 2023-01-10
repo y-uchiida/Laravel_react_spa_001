@@ -13,3 +13,8 @@ export const updateDoneTask = async ({ id, is_done }: Task) => {
     );
     return data;
 }
+
+export const createTask = async (title: string) => {
+    const { data } = await axios.post<Task>("/api/tasks", { title: title });
+    return data;
+}
