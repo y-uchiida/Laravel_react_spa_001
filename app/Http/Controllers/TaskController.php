@@ -6,6 +6,7 @@ use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -15,7 +16,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return Task::all();
+        return Task::where('user_id', Auth::id())->orderByDesc('created_at')->get();
     }
 
     /**
@@ -35,6 +36,11 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
+        $this->authorize('store', Task::class);
+
+        $request->merge([
+            'user_id' => Auth::id()
+        ]);
         $task = Task::create($request->all());
         return $task
             ? response()->json($task, 201) // 作成成功の場合は作成したTask のデータと201 レスポンス
@@ -72,6 +78,8 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
+        $this->authorize('update', $task);
+
         $task->title = $request->title;
 
         $result = $task->update();
@@ -88,6 +96,8 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+        $this->authorize('delete', $task);
+
         $result = $task->delete();
 
         return $result
@@ -104,6 +114,8 @@ class TaskController extends Controller
      */
     public function updateDone(Task $task, HttpRequest $request)
     {
+        $this->authorize('upDateDone', $task);
+
         $task->is_done = $request->is_done;
 
         $result = $task->update();
