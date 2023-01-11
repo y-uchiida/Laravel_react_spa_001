@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Auth;
 
 class TaskPolicy
 {
@@ -30,7 +31,7 @@ class TaskPolicy
      */
     public function view(User $user, Task $task)
     {
-        //
+        return $user->id === $task->user_id;
     }
 
     /**
@@ -44,6 +45,11 @@ class TaskPolicy
         //
     }
 
+    public function store()
+    {
+        return true;
+    }
+
     /**
      * Determine whether the user can update the model.
      *
@@ -53,7 +59,7 @@ class TaskPolicy
      */
     public function update(User $user, Task $task)
     {
-        //
+        return $user->id === $task->user_id;
     }
 
     /**
@@ -65,7 +71,7 @@ class TaskPolicy
      */
     public function delete(User $user, Task $task)
     {
-        //
+        return $user->id === $task->user_id;
     }
 
     /**
@@ -90,5 +96,10 @@ class TaskPolicy
     public function forceDelete(User $user, Task $task)
     {
         //
+    }
+
+    public function updateDone(User $user, Task $task)
+    {
+        return $user->id === $task->user_id;
     }
 }

@@ -36,6 +36,8 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
+        $this->authorize('store', Task::class);
+
         $request->merge([
             'user_id' => Auth::id()
         ]);
@@ -76,6 +78,8 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
+        $this->authorize('update', $task);
+
         $task->title = $request->title;
 
         $result = $task->update();
@@ -92,6 +96,8 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+        $this->authorize('delete', $task);
+
         $result = $task->delete();
 
         return $result
@@ -108,6 +114,8 @@ class TaskController extends Controller
      */
     public function updateDone(Task $task, HttpRequest $request)
     {
+        $this->authorize('upDateDone', $task);
+
         $task->is_done = $request->is_done;
 
         $result = $task->update();
