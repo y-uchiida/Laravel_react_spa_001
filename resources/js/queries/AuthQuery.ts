@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "react-query";
-import { getUser, login } from "../api/AuthApi";
+import { getUser, login, logout } from "../api/AuthApi";
 import { toast } from "react-toastify";
 
 export const useUser = () => {
@@ -14,4 +14,15 @@ export const useLogin = () => {
             toast.error("ログインに失敗しました");
         },
     });
+}
+
+export const useLogout = () => {
+    return useMutation(logout, {
+        onSuccess: () => {
+            toast.success('ログアウトしました');
+        },
+        onError: () => {
+            toast.error('ログアウト時にエラーが発生しました');
+        }
+    })
 }
