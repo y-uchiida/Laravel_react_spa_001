@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter, } from 'react-router-dom'
 import { App } from './App'
 import { QueryClient, QueryClientProvider } from "react-query";
+import { AuthProvider } from "./hooks/AuthContext";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -18,9 +19,11 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
         <BrowserRouter>
-            <QueryClientProvider client={queryClient}>
-                <App />
-            </QueryClientProvider>
+            <AuthProvider>
+                <QueryClientProvider client={queryClient}>
+                    <App />
+                </QueryClientProvider>
+            </AuthProvider>
         </BrowserRouter>
     </React.StrictMode>
 )
