@@ -1,5 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../hooks/AuthContext'
+import { useLogout, useUser } from '../queries/AuthQuery'
 
 const navBarStyle: React.CSSProperties = {
     display: 'flex',
@@ -12,11 +14,21 @@ const navBarStyle: React.CSSProperties = {
 }
 
 export const NavBar = () => {
+    const { isAuth } = useAuth();
+    const logout = useLogout();
+
+    const handleLogout = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        e.preventDefault();
+        logout.mutate();
+    }
     return (
         <div style={navBarStyle}>
-            <Link to='/tasks' >Tasks</Link>
+
+            {isAuth
+                ? <><Link to='/tasks' >Tasks</Link><a href="" onClick={handleLogout}>Logout</a></>
+                : <Link to='/login' >Login</Link>
+            }
             <Link to='/help' >Help</Link>
-            <Link to='/login' >Login</Link>
         </ div>
     )
 }

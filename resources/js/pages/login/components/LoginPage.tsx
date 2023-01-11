@@ -1,15 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLogin } from "../../../queries/AuthQuery"
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../hooks/AuthContext";
 
 export const LoginPage = () => {
     const login = useLogin();
     const [email, setEmail] = useState('admin@example.com');
     const [password, setPassword] = useState('admin@example.com');
+    const navigate = useNavigate();
+    const { isAuth } = useAuth();
 
     const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         login.mutate({ email, password });
     }
+
+    useEffect(() => {
+        if (isAuth) {
+            navigate('/tasks');
+        }
+    }, [isAuth]);
+
 
     return (
         <div>
