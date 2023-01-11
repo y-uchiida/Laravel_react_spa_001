@@ -6,6 +6,7 @@ use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -15,7 +16,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return Task::all();
+        return Task::where('user_id', Auth::id())->orderByDesc('created_at')->get();
     }
 
     /**
