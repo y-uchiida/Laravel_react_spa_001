@@ -33,7 +33,7 @@ export const LoginPage = () => {
                             name="email"
                             id="email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.validationMessage)}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                     </label>
                 </div>
