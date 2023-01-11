@@ -9,7 +9,6 @@ export const useUser = () => {
 export const useLogin = () => {
     return useMutation(login, {
         onSuccess: (user) => {
-            console.log(user);
         },
         onError: () => {
             toast.error("ログインに失敗しました");

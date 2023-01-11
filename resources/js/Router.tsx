@@ -1,7 +1,7 @@
 import { createBrowserRouter, useRoutes } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { HelpPage } from "./pages/help";
-import { Login } from "./pages/login";
+import { LoginPage } from "./pages/login";
 import { TaskPage } from "./pages/tasks";
 
 const routes = [
@@ -19,7 +19,7 @@ const routes = [
             },
             {
                 path: "login",
-                element: <Login />,
+                element: <LoginPage />,
             },
             {}
         ]
