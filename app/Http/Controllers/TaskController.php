@@ -36,6 +36,9 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
+        $request->merge([
+            'user_id' => Auth::id()
+        ]);
         $task = Task::create($request->all());
         return $task
             ? response()->json($task, 201) // 作成成功の場合は作成したTask のデータと201 レスポンス
